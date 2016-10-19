@@ -1,6 +1,6 @@
 <?php
 /**
- * Side effect functions for use in php components.
+ * Side effect functions for use in php elements.
  */
 
 /**
@@ -11,11 +11,11 @@
  */
 function createSelectBox($id, $messageArray) 
 {
-    echo ('<select id="' . $id . '" class="selectpicker">');
+    echo ('<select name="' . $id . '" class="selectpicker">');
     while (list ($key, $val) = each($messageArray)) {
         $explodedVal = explode(',', $val);
         $value = $explodedVal[0];
-        error_log("Count of " . $messageArray . ": " . count($explodedVal));
+        
         if (count($explodedVal) > 1) {
             $text = $explodedVal[1];            
         } else {

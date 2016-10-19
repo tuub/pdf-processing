@@ -30,7 +30,7 @@ class PdfProcessing
      */
     public function renameFile ($filename, $suffix)
     {
-        return hash($this->configs['hash'], $filename) . time() . $suffix;
+        return hash($this->configs['hash'], $filename . time()) . $suffix;
     }
 
     /**
@@ -61,23 +61,40 @@ class PdfProcessing
     }
     
     /**
-     * Triggers the execution of PDF/A processing.
+     * Creates the arguments for PDF/A processing.
      *  
      * @param string $type - the processing type
      * @param string $level - the compliancy level
      * @param string $mode - the processing mode
      * @param string $suffix - the file suffix
-     * @return string - a line with the args
+     * @return string - the arguments
      */
     public function createPdfaArgs($type, $level, $mode, $suffix) 
     {
         $args = $type . ' ' . $mode . ' ' . $this->configs['pdfLevelArg'] . $level . ' ' 
             . $this->configs['pdfOutputArg'] . $this->configs['processedPath'] 
             . basename($_SESSION['targetFile'], $suffix) . '_processed' . $suffix . ' '
-            . $this->configs['uploadPath'] . $_SESSION['targetFile'];
-            return $args;
+            . $_SESSION['targetFile'];
+        return $args;
     }
 
+    /**
+     * Creates the arguments for PDF profile processing.
+     * 
+     * @param string $profile - the profile file name
+     * @param string $suffix - the file suffix
+     * @return string - the arguments
+     */
+    public function createPdfProfileArgs($profile, $suffix)
+    {
+        $args = $this->configs['pdfProfileArg'] . ' ' 
+            . $this->configs['pdfProfilesPath'] . escapeshellarg($profile) . ' '
+            . $_SESSION['targetFile'] . ' '
+            . $this->configs['processedPath']
+            . basename($_SESSION['targetFile'], $suffix) . '_processed' . $suffix;
+        return $args;
+    }
+    
     /**
      * Executes the pdf processor with the given arguments.
      * 
