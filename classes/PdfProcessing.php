@@ -28,9 +28,9 @@ class PdfProcessing
      *
      * @param string $filename            
      */
-    public function renameFile ($filename, $suffix)
+    public function renameFile ($filename, $fileExt)
     {
-        return hash($this->configs['hash'], $filename . time()) . $suffix;
+        return hash($this->configs['hash'], $filename . time()) . $fileExt;
     }
 
     /**
@@ -50,14 +50,36 @@ class PdfProcessing
         
         $targetFile = $this->configs['uploadPath'] . $saveFileName;
         
-        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+        if (file_exists($targetFile)) {
+            $errorMessage = $messages['fileAlreadyExists'];
+            
+        } elseif (move_uploaded_file($file['tmp_name'], $targetFile)) {
             $filename = basename($file['name']);
-            $_SESSION['targetFile'] = $targetFile;
+            $_SESSION['uploadFile'] = $targetFile;
             $_SESSION['originalFileName'] = $filename;
             
             return TRUE;
         }
         return FALSE;
+    }
+
+    /**
+     * Creates name and display name of the processed file and saves them to the session.
+     * 
+     * @param string $fileExt - the file extension
+     */
+    public function createAndSaveProcessedFileName($fileExt) {        
+        $_SESSION['processedFile'] = $this->configs['processedPath'] 
+            . $this->addFileSuffix($_SESSION['uploadFile'], $fileExt, '_processed'); 
+        
+        $_SESSION['processedDisplayName'] = $this->addFileSuffix($_SESSION['originalFileName'], 
+            $fileExt, '_processed');
+    }
+    
+
+    private function addFileSuffix($filename, $fileExt, $suffix) 
+    {
+        return basename($filename, $fileExt) . $suffix . $fileExt;
     }
     
     /**
@@ -66,15 +88,13 @@ class PdfProcessing
      * @param string $type - the processing type
      * @param string $level - the compliancy level
      * @param string $mode - the processing mode
-     * @param string $suffix - the file suffix
      * @return string - the arguments
      */
-    public function createPdfaArgs($type, $level, $mode, $suffix) 
+    public function createPdfaArgs($type, $level, $mode) 
     {
         $args = $type . ' ' . $mode . ' ' . $this->configs['pdfLevelArg'] . $level . ' ' 
-            . $this->configs['pdfOutputArg'] . $this->configs['processedPath'] 
-            . basename($_SESSION['targetFile'], $suffix) . '_processed' . $suffix . ' '
-            . $_SESSION['targetFile'];
+            . $this->configs['pdfOutputArg'] . $_SESSION['processedFile'] . ' '
+            . $_SESSION['uploadFile'];
         return $args;
     }
 
@@ -82,16 +102,26 @@ class PdfProcessing
      * Creates the arguments for PDF profile processing.
      * 
      * @param string $profile - the profile file name
-     * @param string $suffix - the file suffix
      * @return string - the arguments
      */
-    public function createPdfProfileArgs($profile, $suffix)
+    public function createPdfProfileArgs($profile)
     {
         $args = $this->configs['pdfProfileArg'] . ' ' 
             . $this->configs['pdfProfilesPath'] . escapeshellarg($profile) . ' '
-            . $_SESSION['targetFile'] . ' '
-            . $this->configs['processedPath']
-            . basename($_SESSION['targetFile'], $suffix) . '_processed' . $suffix;
+            . $_SESSION['uploadFile'] . ' ' . $_SESSION['processedFile'];
+        return $args;
+    }
+
+    /**
+     * Creates the arguments for free PDF processing.
+     *
+     * @param string $args - the free args
+     * @return string - the arguments
+     */
+    public function createPdfFreeArgs($freeArgs)
+    {
+        $args = $freeArgs . ' ' . $this->configs['pdfOutputArg'] 
+            . $_SESSION['processedFile'] . ' ' . $_SESSION['uploadFile'];
         return $args;
     }
     
@@ -112,7 +142,8 @@ class PdfProcessing
      * 
      * @return array
      */
-    public function getPdfProfiles() {
+    public function getPdfProfiles() 
+    {
         $profileDir = $this->configs['pdfProfilesPath'];
         if (!is_dir($profileDir)) {
             error_log('The pdf profiles path in the config.ini "' . $profileDir . '" is not a valid directory');
@@ -131,11 +162,30 @@ class PdfProcessing
     }
     
     /**
-     * Deletes the uploaded file and clears the session.
+     * Writes a download file in the output buffer.
+     * 
+     * @param string $path
+     * @param string $mimeType
+     * @param string $displayName
+     */
+    public function downloadFile($path, $mimeType, $displayName) 
+    {
+        $filesize = filesize($path);
+        
+        header("Content-Type: $mimeType");
+        header("Content-Disposition: attachment; filename=$displayName");
+        header("Content-Length: $filesize");
+        
+        readfile($path);
+    }
+    
+    /**
+     * Deletes the uploaded and processed files and clears the session.
      */
     public function clearSession() 
     {
-        unlink($_SESSION['targetFile']);
+        unlink($_SESSION['uploadFile']);
+        unlink($_SESSION['processedFile']);
         session_unset();
     }
 }

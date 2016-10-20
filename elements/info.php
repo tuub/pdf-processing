@@ -6,9 +6,23 @@
 
 <div class="container top-buffer">
     <div class="row">
-    	<p><?php echo($messages['returnValueMessage']) ?></p>
+        <div class="col-sm-12">
+        	<?php echo($messages['argsLabel']) ?>
+    	</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+			<pre><?php echo($args)?></pre>
+    	</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+        	<?php echo($messages['returnValueMessage']) ?>
+    	</div>
     </div>
 	<div class="row">
-		<pre><?php echo($processingReturnValue)?></pre>
+        <div class="col-sm-12">
+			<pre><?php echo($processingReturnValue)?></pre>
+    	</div>
 	</div>
 </div> 

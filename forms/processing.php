@@ -3,7 +3,7 @@
  * Form for the pdf processing settings.
  */
 ?>
-<form method="post">
+<form method="post" action="index.php">
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12">
@@ -25,7 +25,7 @@
 			</div>
 			<div class="col-sm-2">
 <?php
-    createSelectBox('pdfa_modus', $messages['pdfaModus']);
+    createSelectBox('pdfa_mode', $messages['pdfaModus']);
 ?>							
 			</div>
 			<div class="col-sm-3">
@@ -50,7 +50,7 @@
 		<div class="row top-buffer">
 			<div class="col-sm-3"><?php echo($messages['pdfFreeProcessMessage']) ?></div>
 			<div class="col-sm-6">
-				<input type="text" class="form-control" id="pdf_args">
+				<input type="text" class="form-control" name="pdf_args">
 			</div>
 			<div class="col-sm-3">
 				<input type="submit" class="btn btn-primary" name="free_process"

@@ -3,7 +3,7 @@
  * Form for the file upload.
  */
 ?>
-<form method="post" enctype="multipart/form-data">
+<form method="post" action="index.php" enctype="multipart/form-data">
     <div class="container">
     	<div class="row">
     		<div class="col-sm-4">
