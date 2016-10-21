@@ -15,12 +15,9 @@ class PdfProcessing
     /**
      * Contructor loading the configuration.
      */
-    function __construct ()
+    function __construct ($configs)
     {
-        $this->configs = parse_ini_file("ini/config.ini");
-        if (!$this->configs) {
-            error_log('The configuration file ini/config.ini could not be loaded!');
-        }
+        $this->configs = $configs;
     }
 
     /**
@@ -54,8 +51,8 @@ class PdfProcessing
             $errorMessage = $messages['fileAlreadyExists'];
             
         } elseif (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            $filename = basename($file['name']);
             $_SESSION['uploadFile'] = $targetFile;
+            $filename = htmlentities(basename($file['name']));
             $_SESSION['originalFileName'] = $filename;
             
             return TRUE;
@@ -146,7 +143,7 @@ class PdfProcessing
     {
         $profileDir = $this->configs['pdfProfilesPath'];
         if (!is_dir($profileDir)) {
-            error_log('The pdf profiles path in the config.ini "' . $profileDir . '" is not a valid directory');
+            error_log("The pdf profiles path in the config.ini '$profileDir' is not a valid directory");
             return array();
         }
         $profiles = scandir($profileDir);

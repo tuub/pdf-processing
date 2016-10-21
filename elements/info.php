@@ -7,22 +7,22 @@
 <div class="container top-buffer">
     <div class="row">
         <div class="col-sm-12">
-        	<?php echo($messages['argsLabel']) ?>
+        	<p><?php echo($messages['argsLabel']) ?></p>
     	</div>
     </div>
     <div class="row">
         <div class="col-sm-12">
-			<pre><?php echo($args)?></pre>
+			<pre><?php echo(htmlentities($args))?></pre>
     	</div>
     </div>
     <div class="row">
         <div class="col-sm-12">
-        	<?php echo($messages['returnValueMessage']) ?>
+        	<p><?php echo($messages['returnValueMessage']) ?></p>
     	</div>
     </div>
 	<div class="row">
         <div class="col-sm-12">
-			<pre><?php echo($processingReturnValue)?></pre>
+			<pre><?php echo(htmlentities($processingReturnValue))?></pre>
     	</div>
 	</div>
 </div> 
