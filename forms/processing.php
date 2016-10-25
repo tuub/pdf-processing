@@ -34,6 +34,8 @@
 			</div>
 		</div>
 
+<?php include 'elements/metadata.php'; ?>
+
 		<div class="row top-buffer">
 			<div class="col-sm-3"><?php echo($messages['pdfProfileProcessMessage']) ?></div>
 			<div class="col-sm-6">

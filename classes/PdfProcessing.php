@@ -65,7 +65,8 @@ class PdfProcessing
      * 
      * @param string $fileExt - the file extension
      */
-    public function createAndSaveProcessedFileName($fileExt) {        
+    public function createAndSaveProcessedFileName($fileExt) 
+    {        
         $_SESSION['processedFile'] = $this->configs['processedPath'] 
             . $this->addFileSuffix($_SESSION['uploadFile'], $fileExt, '_processed'); 
         
@@ -73,10 +74,47 @@ class PdfProcessing
             $fileExt, '_processed');
     }
     
-
+    /**
+     * Saves the given content as an xmp file.
+     *  
+     * @param string $content
+     */
+    public function saveXmpFile($content) 
+    {
+        if (!file_exists($this->configs['xmpPath'])) {
+            mkdir($this->configs['xmpPath']);
+        }
+        $xmpPath = $this->configs['xmpPath'] . basename($_SESSION['uploadFile'], '.pdf') . '.xmp';
+        if (file_put_contents($xmpPath, $content)) {
+            $_SESSION['xmpFile'] = $xmpPath; 
+        } else {
+            error_log("The .xmp file could not be saved!");
+        }
+        
+    }
+    
     private function addFileSuffix($filename, $fileExt, $suffix) 
     {
         return basename($filename, $fileExt) . $suffix . $fileExt;
+    }
+    
+    /**
+     * Creates an associative array from metadata fields in a the post.
+     * 
+     * @return string[]
+     */
+    public function createMetadataArray() 
+    {
+        $metadataArray = array();
+        foreach ($this->configs['metadataField'] as $field) {
+            if (isset($_POST[$field])) {
+                $value = trim($_POST[$field]);
+                if (!empty($field)) {
+                    $metadataArray[$field] = $value;
+                }
+            }
+        }
+        return $metadataArray;
     }
     
     /**
@@ -85,13 +123,22 @@ class PdfProcessing
      * @param string $type - the processing type
      * @param string $level - the compliancy level
      * @param string $mode - the processing mode
+     * @param string[] $metadataArray - additional metadata
      * @return string - the arguments
      */
     public function createPdfaArgs($type, $level, $mode) 
     {
-        $args = $type . ' ' . $mode . ' ' . $this->configs['pdfLevelArg'] . $level . ' ' 
-            . $this->configs['pdfOutputArg'] . $_SESSION['processedFile'] . ' '
+        $metadata = '';
+        if (!empty($_SESSION['xmpFile'])) {
+            $metadata = $this->configs['metadataArg'] . $_SESSION['xmpFile'] . ' ';
+        }
+        
+        $args = $type . ' ' . $mode . ' ' . $metadata 
+            . $this->configs['pdfLevelArg'] . $level . ' ' 
+            . $this->configs['pdfOutputArg'] . $_SESSION['processedFile'] . ' ' 
+            . $this->configs['pdfOverwriteArg'] . ' ' 
             . $_SESSION['uploadFile'];
+        
         return $args;
     }
 
@@ -105,7 +152,8 @@ class PdfProcessing
     {
         $args = $this->configs['pdfProfileArg'] . ' ' 
             . $this->configs['pdfProfilesPath'] . escapeshellarg($profile) . ' '
-            . $_SESSION['uploadFile'] . ' ' . $_SESSION['processedFile'];
+            . $_SESSION['uploadFile'] . ' ' . $this->configs['pdfOutputArg'] 
+            . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'];
         return $args;
     }
 
@@ -117,8 +165,9 @@ class PdfProcessing
      */
     public function createPdfFreeArgs($freeArgs)
     {
-        $args = $freeArgs . ' ' . $this->configs['pdfOutputArg'] 
-            . $_SESSION['processedFile'] . ' ' . $_SESSION['uploadFile'];
+        $args = escapeshellcmd($freeArgs) . ' ' . $this->configs['pdfOutputArg'] 
+            . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'] . ' ' 
+            . $_SESSION['uploadFile'];
         return $args;
     }
     
@@ -131,7 +180,7 @@ class PdfProcessing
     public function executePdfProcessing ($args)
     {
         $cmd = $this->configs['pdfProcessor'] . ' ' . $args;
-        return shell_exec(escapeshellcmd($cmd));
+        return shell_exec($cmd);
     }
     
     /**

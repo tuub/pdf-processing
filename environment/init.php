@@ -8,6 +8,7 @@ header('Content-Type: text/html; charset=utf-8');
 
 $messages = parse_ini_file("ini/messages.ini");
 $configs = parse_ini_file("ini/config.ini");
+$xmpConfigs = parse_ini_file("ini/xmp_fragments.ini");
 
 if (!$configs) {
     error_log('The configuration file ini/config.ini could not be loaded!');
@@ -16,5 +17,8 @@ if (!$configs) {
 // Class initialization
 include_once("classes/PdfProcessing.php");
 $processor = new PdfProcessing($configs);
+
+include_once("classes/XmpCreator.php");
+$xmpCreator = new XmpCreator($xmpConfigs);
 
 ?>

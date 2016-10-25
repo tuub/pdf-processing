@@ -53,7 +53,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('--analyze --forceconversion_reconvert ' 
             . $this->processor->configs['pdfLevelArg'] . '2a ' 
             . $this->processor->configs['pdfOutputArg']  
-            . '/path/to/myFile_processed.pdf ' . '/path/to/myFile.pdf', $retval);
+            . '/path/to/myFile_processed.pdf ' 
+            . $this->processor->configs['pdfOverwriteArg']  
+            . ' /path/to/myFile.pdf', $retval);
         
         session_unset();
     }
@@ -69,7 +71,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
     
         $this->assertEquals($this->processor->configs['pdfProfileArg'] . ' '
             . $this->processor->configs['pdfProfilesPath'] .escapeshellarg($profileFile) . ' '  
-            . '/path/to/myFile.pdf ' . '/path/to/myFile_processed.pdf', $retval);
+            . '/path/to/myFile.pdf ' . $this->processor->configs['pdfOutputArg'] 
+            . '/path/to/myFile_processed.pdf '
+            . $this->processor->configs['pdfOverwriteArg'], $retval);
         
         session_unset();
     }
@@ -84,9 +88,22 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $args = $this->processor->createPdfFreeArgs($freeArgs);
         
         $this->assertEquals($freeArgs . ' ' . $this->processor->configs['pdfOutputArg'] 
-            . 'foo.pdf bar.pdf', $args);
+            . 'foo.pdf ' . $this->processor->configs['pdfOverwriteArg']  
+            . ' bar.pdf', $args);
         
         session_unset();
+    }
+    
+    function testCreateMetadataArray()
+    {
+        $_POST['title'] = "A Title";
+        $_POST['creator'] = "foo; bar";
+        
+        $metadataArray = $this->processor->createMetadataArray();
+        
+        $this->assertTrue(!empty($metadataArray));
+        $this->assertEquals("A Title", $metadataArray['title']);
+        $this->assertEquals("foo; bar", $metadataArray['creator']);       
     }
     
 }

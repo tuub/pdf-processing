@@ -28,6 +28,11 @@
     // If a process button was pushed, perform processing 
     if (!empty($_POST['pdfa_process'])) {
         $processor->createAndSaveProcessedFileName('.pdf');
+        $metadataArray = $processor->createMetadataArray();
+        if (!empty($metadataArray)) {
+            $fileContent = $xmpCreator->createXmp($metadataArray);
+            $processor->saveXmpFile($fileContent);
+        }
         $args = $processor->createPdfaArgs($_POST['pdfa_process_type'], 
             $_POST['pdfa_level'], $_POST['pdfa_mode']);
 
