@@ -1,7 +1,7 @@
 <?php
 
 /**
- * A class for the creation of am xmp file the additional metadata.
+ * A class for the creation of am xmp file with additional metadata.
  *
  */
 class XmpCreator
@@ -28,13 +28,20 @@ class XmpCreator
      */
     public function createXmp($contentArray) 
     {        
-        $dublinCore = '';
-        $xmpContent = '';
+        $dublinCore = "";
+        $xmpContent = "";
+        
+        if (empty(array_filter($contentArray))) {
+            return "";
+        }
         
         foreach ($contentArray as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
             switch($key) {
                 case "keywords":
-                    $keywordArray = explode(';', $value);
+                    $keywordArray = array_filter(explode(';', $value));
                     $xmpContent .= $this->createPdfKeywords(join(',', $keywordArray)) . "\n";
                     $dublinCore .= $this->createDcSubject($keywordArray) . "\n";
                     break;

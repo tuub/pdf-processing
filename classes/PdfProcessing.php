@@ -88,6 +88,7 @@ class PdfProcessing
         if (file_put_contents($xmpPath, $content)) {
             $_SESSION['xmpFile'] = $xmpPath; 
         } else {
+            $errorMessage = $messages['xmpFileNotSaved'];
             error_log("The .xmp file could not be saved!");
         }
         
@@ -232,6 +233,7 @@ class PdfProcessing
     {
         unlink($_SESSION['uploadFile']);
         unlink($_SESSION['processedFile']);
+        unlink($_SESSION['xmpFile']);
         session_unset();
     }
 }

@@ -66,7 +66,7 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
     
     function testCreateXmp()
     {
-        $xmpContent = array('keywords' => 'foo;bar', 'creator' => 'A, B; C, D', 'title' => 'My Title');
+        $xmpContent = array('keywords' => 'foo;bar;', 'creator' => 'A, B; C, D', 'title' => 'My Title');
         
         $expected = "<?xpacket begin='' id='' ?>\n"
             . "<x:xmpmeta xmlns:x='adobe:ns:meta/' x:xmptk='Adobe XMP Core 4.0-c316 44.253921, Sun Oct 01 2006 17:14:39'>\n"
@@ -86,6 +86,40 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $result);
     }
+    
+    function testCreateXmpEmptyValues()
+    {
+        $xmpContent = array('keywords' => '', 'creator' => '', 'title' => 'My Title');
+    
+        $expected = "<?xpacket begin='' id='' ?>\n"
+            . "<x:xmpmeta xmlns:x='adobe:ns:meta/' x:xmptk='Adobe XMP Core 4.0-c316 44.253921, Sun Oct 01 2006 17:14:39'>\n"
+            . "  <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>\n"
+            . "    <rdf:Description rdf:about='' xmlns:dc='http://purl.org/dc/elements/1.1/'>\n"
+            . "    <dc:title><rdf:Alt><rdf:li xml:lang='x-default'>My Title</rdf:li></rdf:Alt></dc:title>\n"
+            . "    </rdf:Description>\n"
+            . "  </rdf:RDF>\n"
+            . "</x:xmpmeta>";
+    
+        $result = $this->xmpCreator->createXmp($xmpContent);
+
+        $this->assertEquals($expected, $result);
+    }
+
+    function testCreateXmpEmptyArray()
+    {
+        // Case 1: all empty
+        $xmpContent = array();
+        $expected = "";
+        $result = $this->xmpCreator->createXmp($xmpContent);
+        $this->assertEquals($expected, $result);
+        
+        // Case 2: all values empty
+        $xmpContent = array('keywords' => '', 'creator' => '');
+        $result = $this->xmpCreator->createXmp($xmpContent);
+        $this->assertEquals($expected, $result);
+        
+    }
+    
 }
 
 ?>

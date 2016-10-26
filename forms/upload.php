@@ -6,10 +6,10 @@
 <form method="post" action="index.php" enctype="multipart/form-data">
     <div class="container">
     	<div class="row">
-    		<div class="col-sm-4">
+    		<div class="col-sm-6">
     			<p>	<?php echo($messages['selectFile']) ?> </p>
     		</div>
-    		<div class="col-sm-4">
+    		<div class="col-sm-6">
         		<input type="file" name="fileToUpload" id="fileToUpload">
         	</div>
         </div>
