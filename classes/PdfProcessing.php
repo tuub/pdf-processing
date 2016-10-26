@@ -138,6 +138,7 @@ class PdfProcessing
             . $this->configs['pdfLevelArg'] . $level . ' ' 
             . $this->configs['pdfOutputArg'] . $_SESSION['processedFile'] . ' ' 
             . $this->configs['pdfOverwriteArg'] . ' ' 
+            . $this->configs['cachefolderArg'] . ' ' 
             . $_SESSION['uploadFile'];
         
         return $args;
@@ -154,7 +155,8 @@ class PdfProcessing
         $args = $this->configs['pdfProfileArg'] . ' ' 
             . $this->configs['pdfProfilesPath'] . escapeshellarg($profile) . ' '
             . $_SESSION['uploadFile'] . ' ' . $this->configs['pdfOutputArg'] 
-            . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'];
+            . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'] . ' '
+            . $this->configs['cachefolderArg'];
         return $args;
     }
 
@@ -168,6 +170,7 @@ class PdfProcessing
     {
         $args = escapeshellcmd($freeArgs) . ' ' . $this->configs['pdfOutputArg'] 
             . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'] . ' ' 
+            . $this->configs['cachefolderArg'] . ' ' 
             . $_SESSION['uploadFile'];
         return $args;
     }
