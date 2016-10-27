@@ -6,8 +6,7 @@ It is for the time being implemented only for test purposes.
 
 * PHP 7
 * Apache 2
-* The callas software **pdfaPilot** has to be installed and added to the PATH.
-..* **Apparently the pdfaPilot also has to be licensed to the user under with the apache server runs, or it will be regarded as a non-licensed copy**
+* The callas software **pdfaPilot** has to be installed and added to the PATH. Additionally, the pdfaPilot licence file Licence.txt has to be copied to the same directory as the pdfaPilot binary, otherwise, it cannot be executed by www-data.
 
 * The `upload_max_filesize` PHP setting should be increased (the default is only 2 MB), in connection, the `post_max_size` also must be increased. On the other hand, `max_file_uploads` can be set to only one, e.g. (In (/etc/php/7.0/apache2/)php.ini):
 
