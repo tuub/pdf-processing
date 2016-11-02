@@ -1,16 +1,29 @@
 <?php
+/**
+ * A class with unit tests for the class PdfProcessing.
+ */
+
 require_once 'PHPUnit/Autoload.php';
 include_once 'classes/PdfProcessing.php';
 
 class PdfProcessingTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * The class to be tested. 
+     */
     var $processor = NULL;
     
+    /**
+     * Instantiates the class to be tested.
+     */
     function __construct() {
         $this->processor = new PdfProcessing(parse_ini_file("ini/config.ini"));
     }
     
+    /**
+     * Tests the renaming of files.
+     */
     function testRenameFile()
     {
         $filename = '/usr/local/bin/bad_script.sh'; 
@@ -26,7 +39,10 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(empty(preg_match('/\//', $newName)));
     }
     
-    
+    /**
+     * Tests the creation of the name of the processed file
+     * and that this name is saved in the session.
+     */
     function testCreateAndSaveProcessedFileName() 
     {
         $_SESSION['uploadFile'] = '/path/to/bar.pdf';
@@ -42,7 +58,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         session_unset();
     }
     
-    
+    /**
+     * Tests the creation of pdfa arguments.
+     */
     function testCreatePdfaArgs() 
     {
         $_SESSION['uploadFile'] = '/path/to/myFile.pdf';
@@ -60,7 +78,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         session_unset();
     }
     
-    
+    /**
+     * Tests the creation of pdf profile arguments. 
+     */
     function testCreatePdfProfileArgs() 
     {
         $_SESSION['uploadFile'] = '/path/to/myFile.pdf';
@@ -78,7 +98,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         session_unset();
     }
 
-    
+    /**
+     * Tests the cretion of arguments for free execution. 
+     */
     function testCreatePdfFreeArgs()
     {
         $freeArgs = '-foo -bar';
@@ -94,6 +116,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         session_unset();
     }
     
+    /**
+     * Tests the creation of the metadata array.
+     */
     function testCreateMetadataArray()
     {
         $_POST['title'] = "A Title";
