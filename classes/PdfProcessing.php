@@ -240,4 +240,3 @@ class PdfProcessing
         session_unset();
     }
 }
-?>

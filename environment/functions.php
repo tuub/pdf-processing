@@ -26,4 +26,3 @@ function createSelectBox($id, $messageArray)
     echo ('</select>');
 }
 
-?>

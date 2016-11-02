@@ -17,5 +17,3 @@ if (empty($_SESSION['processedFile']) || !file_exists($_SESSION['processedFile']
     $processor->downloadFile($_SESSION['processedFile'], 'application/pdf', $_SESSION['processedDisplayName']);
     exit;
 }
-
-?>

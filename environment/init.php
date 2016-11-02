@@ -21,4 +21,3 @@ $processor = new PdfProcessing($configs);
 include_once("classes/XmpCreator.php");
 $xmpCreator = new XmpCreator($xmpConfigs);
 
-?>

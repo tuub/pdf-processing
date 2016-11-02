@@ -20,4 +20,3 @@ if (!empty($infoMessage)) {
 
 <?php
 }
-?>

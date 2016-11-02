@@ -55,4 +55,4 @@
         $processor->clearSession();
         $infoMessage = $messages['fileDeletedMessage'];
     }
-?>
+

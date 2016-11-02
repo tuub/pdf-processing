@@ -33,5 +33,3 @@
     }
     
     include("elements/footer.php");
-    
-?>

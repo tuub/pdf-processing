@@ -121,5 +121,3 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
     }
     
 }
-
-?>
