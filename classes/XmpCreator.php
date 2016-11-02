@@ -136,12 +136,26 @@ class XmpCreator
         return $this->packContent('xmpAlt', $content);
     }
         
-    
+    /**
+     * Packs the given content in a configured an xmp context.
+     * 
+     * @param string $config    the config key
+     * @param string $content   the content
+     * @return string
+     */
     private function packContent($config, $content) 
     {
         return sprintf($this->xmpConfigs[$config], trim($content));
     }
     
+    /**
+     * Packs the given content into a configured tag of a certain type.
+     * 
+     * @param string $type      the tag type key
+     * @param string $tag       the tag name
+     * @param string $content   the content 
+     * @return string
+     */
     private function packDynamicTag($type, $tag, $content) 
     {
         return sprintf($this->xmpConfigs[$type], $tag, trim($content), $tag);

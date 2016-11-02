@@ -94,6 +94,14 @@ class PdfProcessing
         
     }
     
+    /**
+     * Adds a suffix to the file name keeping the file extension.
+     * 
+     * @param string $filename
+     * @param string $fileExt
+     * @param string $suffix
+     * @return string
+     */
     private function addFileSuffix($filename, $fileExt, $suffix) 
     {
         return basename($filename, $fileExt) . $suffix . $fileExt;
