@@ -1,16 +1,29 @@
 <?php
+/**
+ * A class with unit tests for the class XmpCreator.
+ */
+
 require_once 'PHPUnit/Autoload.php';
 include_once 'classes/XmpCreator.php';
 
 class XmpCreatorTest extends PHPUnit_Framework_TestCase
 {
 
+    /**
+     * The class to be tested.
+     */
     var $xmpCreator = NULL;
-    
+
+    /**
+     * Instantiates the class to be tested.
+     */
     function __construct() {
         $this->xmpCreator = new XmpCreator(parse_ini_file("ini/xmp_fragments.ini"));
     }
     
+    /**
+     * Tests the creation of a dc:subject tag.
+     */
     function testCreateDcSubject()
     {
         $valueArray = ['foo', 'bar', 'kilroy'];
@@ -22,6 +35,9 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $xmpKeywords);
     }
 
+    /**
+     * Tests the creation of the dc:creator tag.
+     */
     function testCreateDcCreator()
     {
         $valueArray = ['Mozart, Wolfgang Amadeus', 'Kant, Immanuel'];
@@ -33,6 +49,9 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($expected, $xmpKeywords);
     }
     
+    /**
+     * Tests the creation of pdf keywords.
+     */
     function testCreatePdfKeywords()
     {
         $commaSeparatedKeywords = 'foo, bar, kilroy';
@@ -45,6 +64,9 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $xmpKeywords);
     }
     
+    /**
+     * Tests the creation of the dublin core parent. 
+     */    
     function testCreateDublinCore() 
     {
         $content = 'some content';
@@ -55,7 +77,10 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($expected, $result);
     }
-        
+
+    /**
+     * Tests the creation of the lang tag.
+     */    
     function testCreateDcLangTag()
     {        
         $expected = "<rdf:Alt><rdf:li xml:lang='x-default'>content</rdf:li></rdf:Alt>";        
@@ -64,6 +89,9 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
     
+    /**
+     * Test the creation of a complete xmp document with values. 
+     */
     function testCreateXmp()
     {
         $xmpContent = array('keywords' => 'foo;bar;', 'creator' => 'A, B; C, D', 'title' => 'My Title');
@@ -87,6 +115,9 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
     
+    /**
+     * Tests the creation of an xmp doc with some empty values.
+     */
     function testCreateXmpEmptyValues()
     {
         $xmpContent = array('keywords' => '', 'creator' => '', 'title' => 'My Title');
@@ -105,6 +136,9 @@ class XmpCreatorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $result);
     }
 
+    /**
+     * Tests the creation of an xmp doc with an emtpy array (should result in an empty string).
+     */
     function testCreateXmpEmptyArray()
     {
         // Case 1: all empty
