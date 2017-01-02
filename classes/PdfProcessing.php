@@ -127,31 +127,48 @@ class PdfProcessing
     }
     
     /**
-     * Creates the arguments for PDF/A processing.
+     * Creates the arguments for PDF/A conversion.
      *  
-     * @param string $type - the processing type
      * @param string $level - the compliancy level
-     * @param string $mode - the processing mode
+     * @param string $mode - the conversion mode
      * @param string[] $metadataArray - additional metadata
      * @return string - the arguments
      */
-    public function createPdfaArgs($type, $level, $mode) 
+    public function createPdfaArgs($level, $mode) 
     {
         $metadata = '';
         if (!empty($_SESSION['xmpFile'])) {
             $metadata = $this->configs['metadataArg'] . $_SESSION['xmpFile'] . ' ';
         }
         
-        $args = $type . ' ' . $mode . ' ' . $metadata 
+        $args = $mode . ' ' . $metadata 
             . $this->configs['pdfLevelArg'] . $level . ' ' 
             . $this->configs['pdfOutputArg'] . $_SESSION['processedFile'] . ' ' 
             . $this->configs['pdfOverwriteArg'] . ' ' 
             . $this->configs['cachefolderArg'] . ' ' 
+            . $this->configs['pdfLangArg'] . $lang . ' ' 
             . $_SESSION['uploadFile'];
         
         return $args;
     }
 
+    /**
+     * Creates the arguments for PDF/A validation.
+     *
+     * @param string $level - the compliancy level
+     * @return string - the arguments
+     */
+    public function createPdfaValidateArgs($level)
+    {
+        $args = ' --analyze '
+        . $this->configs['pdfLevelArg'] . $level . ' '
+        . $this->configs['cachefolderArg'] . ' '
+        . $this->configs['pdfLangArg'] . $lang . ' ' 
+        . $_SESSION['uploadFile'];
+    
+        return $args;
+    }
+    
     /**
      * Creates the arguments for PDF profile processing.
      * 
@@ -164,6 +181,7 @@ class PdfProcessing
             . $this->configs['pdfProfilesPath'] . escapeshellarg($profile) . ' '
             . $_SESSION['uploadFile'] . ' ' . $this->configs['pdfOutputArg'] 
             . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'] . ' '
+            . $this->configs['pdfLangArg'] . $lang . ' '
             . $this->configs['cachefolderArg'];
         return $args;
     }
@@ -179,6 +197,7 @@ class PdfProcessing
         $args = escapeshellcmd($freeArgs) . ' ' . $this->configs['pdfOutputArg'] 
             . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'] . ' ' 
             . $this->configs['cachefolderArg'] . ' ' 
+            . $this->configs['pdfLangArg'] . $lang . ' '
             . $_SESSION['uploadFile'];
         return $args;
     }
@@ -246,5 +265,41 @@ class PdfProcessing
         unlink($_SESSION['processedFile']);
         unlink($_SESSION['xmpFile']);
         session_unset();
+    }
+
+    /**
+     * Filters a string line by line.
+     * 
+     * @param string $returnValue
+     * @return string - the filtered string
+     */
+    public function filterReturnValue($returnValue) 
+    {
+        $filteredValue = '';
+        $lines = explode(PHP_EOL, $returnValue);
+        foreach ($lines as $line) {
+            if (preg_match($this->configs['lineRegex'], $line)) {
+                $filteredValue .= $line . PHP_EOL;
+            }
+        }
+        return $filteredValue;
+    }
+    
+    /**
+     * Checks if their were no errors in the return summary.
+     * 
+     * @param string $returnValue
+     * @return boolean
+     */
+    public function returnOk($returnValue) 
+    {
+        $lines = explode(PHP_EOL, $returnValue);
+        $value = "nothing found";
+        foreach ($lines as $line) {
+            if (preg_match($this->configs['summaryRegex'], $line)) {
+                $value = preg_replace($this->configs['summaryRegex'], '$1', $line);
+            }
+        }
+        return strcmp("0", $value) == 0;
     }
 }

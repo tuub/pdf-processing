@@ -12,15 +12,23 @@
 		</div>
 		
 		<div class="row top-buffer">
-			<div class="col-sm-3"><?php echo($messages['pdfaProcessMessage']) ?></div>
-			<div class="col-sm-2">
-<?php
-    createSelectBox('pdfa_process_type', $messages['pdfaProcessType']);
-?>							
-			</div>
-			<div class="col-sm-2">
+			<div class="col-sm-3"><?php echo($messages['pdfaValidateMessage']) ?></div>
+			<div class="col-sm-3">
 <?php
     createSelectBox('pdfa_level', $messages['pdfaLevel']);
+?>							
+			</div>
+			<div class="col-sm-3">
+				<input type="submit" class="btn btn-success" name="pdfa_validate"
+						value="<?php echo($messages['validateButton'])?>">
+			</div>
+		</div>
+
+		<div class="row top-buffer">
+			<div class="col-sm-3"><?php echo($messages['pdfaConvertMessage']) ?></div>
+			<div class="col-sm-1">
+<?php
+    createSelectBox('pdfa_convlevel', $messages['pdfaLevel']);
 ?>							
 			</div>
 			<div class="col-sm-2">
@@ -29,39 +37,15 @@
 ?>							
 			</div>
 			<div class="col-sm-3">
-				<input type="submit" class="btn btn-primary" name="pdfa_process"
-						value="<?php echo($messages['processButton'])?>">
+				<input type="submit" class="btn btn-info" name="pdfa_convert"
+						value="<?php echo($messages['convertButton'])?>">
 			</div>
 		</div>
 
 <?php include 'elements/metadata.php'; ?>
 
 		<div class="row top-buffer">
-			<div class="col-sm-3"><?php echo($messages['pdfProfileProcessMessage']) ?></div>
 			<div class="col-sm-6">
-<?php
-    createSelectBox('pdf_profile', $processor->getPdfProfiles());
-?>							
-			</div>
-			<div class="col-sm-3">
-				<input type="submit" class="btn btn-primary" name="profile_process"
-						value="<?php echo($messages['processButton'])?>">
-			</div>
-		</div>
-		
-		<div class="row top-buffer">
-			<div class="col-sm-3"><?php echo($messages['pdfFreeProcessMessage']) ?></div>
-			<div class="col-sm-6">
-				<input type="text" class="form-control" name="pdf_args">
-			</div>
-			<div class="col-sm-3">
-				<input type="submit" class="btn btn-primary" name="free_process"
-						value="<?php echo($messages['processButton'])?>">
-			</div>
-		</div>
-
-		<div class="row top-buffer">
-			<div class="col-sm-9">
 				<p><strong><?php echo($messages['deleteMessage']) ?></strong></p>
 			</div>
 			<div class="col-sm-3">

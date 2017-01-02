@@ -59,22 +59,41 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests the creation of pdfa arguments.
+     * Tests the creation of pdfa validation arguments.
      */
-    function testCreatePdfaArgs() 
+    function testCreatePdfaValidateArgs() 
+    {
+        $_SESSION['uploadFile'] = '/path/to/myFile.pdf';
+        $retval = $this->processor->createPdfaValidateArgs('2a');
+        
+        $this->assertEquals(' --analyze ' 
+            . $this->processor->configs['pdfLevelArg'] . '2a ' 
+            . $this->processor->configs['cachefolderArg'] . ' '            
+            . $this->processor->configs['pdfLangArg']
+            . ' /path/to/myFile.pdf', $retval);
+        
+        session_unset();
+    }
+
+    /**
+     * Tests the creation of pdfa conversion arguments.
+     */
+    function testCreatePdfaArgs()
     {
         $_SESSION['uploadFile'] = '/path/to/myFile.pdf';
         $_SESSION['processedFile'] = '/path/to/myFile_processed.pdf';
-        $retval = $this->processor->createPdfaArgs('--analyze', '2a', 
-            '--forceconversion_reconvert', '.pdf');
-        
-        $this->assertEquals('--analyze --forceconversion_reconvert ' 
-            . $this->processor->configs['pdfLevelArg'] . '2a ' 
-            . $this->processor->configs['pdfOutputArg']  
-            . '/path/to/myFile_processed.pdf ' 
-            . $this->processor->configs['pdfOverwriteArg']  
+        $retval = $this->processor->createPdfaArgs('2a',
+            '--forceconversion_reconvert');
+    
+        $this->assertEquals('--forceconversion_reconvert '
+            . $this->processor->configs['pdfLevelArg'] . '2a '
+            . $this->processor->configs['pdfOutputArg']
+            . '/path/to/myFile_processed.pdf '
+            . $this->processor->configs['pdfOverwriteArg'] . ' '
+            . $this->processor->configs['cachefolderArg'] . ' '
+            . $this->processor->configs['pdfLangArg']
             . ' /path/to/myFile.pdf', $retval);
-        
+    
         session_unset();
     }
     
@@ -93,7 +112,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
             . $this->processor->configs['pdfProfilesPath'] .escapeshellarg($profileFile) . ' '  
             . '/path/to/myFile.pdf ' . $this->processor->configs['pdfOutputArg'] 
             . '/path/to/myFile_processed.pdf '
-            . $this->processor->configs['pdfOverwriteArg'], $retval);
+            . $this->processor->configs['pdfOverwriteArg'] . ' '
+            . $this->processor->configs['pdfLangArg'] . ' '
+            . $this->processor->configs['cachefolderArg'], $retval);
         
         session_unset();
     }
@@ -110,8 +131,9 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $args = $this->processor->createPdfFreeArgs($freeArgs);
         
         $this->assertEquals($freeArgs . ' ' . $this->processor->configs['pdfOutputArg'] 
-            . 'foo.pdf ' . $this->processor->configs['pdfOverwriteArg']  
-            . ' bar.pdf', $args);
+            . 'foo.pdf ' . $this->processor->configs['pdfOverwriteArg'] . ' '  
+            . $this->processor->configs['cachefolderArg'] . ' '
+            . $this->processor->configs['pdfLangArg'] . ' bar.pdf', $args);
         
         session_unset();
     }
@@ -129,6 +151,69 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(!empty($metadataArray));
         $this->assertEquals("A Title", $metadataArray['title']);
         $this->assertEquals("foo; bar", $metadataArray['creator']);       
+    }
+    
+    /**
+     * Tests the return string filter function.
+     */
+    function testFilterReturnValue() 
+    {
+        $returnValue = 'Progress	88	%\n'
+            . 'Progress	89	%\n'
+            . 'Progress	90	%\n'
+            . 'Hit	PDFA	Syntax problem: Stream dictionary improperly formatted\n'
+            . 'Fix	PDFA	PDF/A entry missing\n'
+            . 'Hit	PDFA	Syntax problem: Indirect object “endobj” keyword not preceded by an EOL marker\n'
+            . 'Progress	100	% Summary\n'
+            . 'Errors	1	Syntax problem: Indirect object “endobj” keyword not preceded by an EOL marker\n'
+            . 'Errors	159	CMYK used but PDF/A OutputIntent not CMYK\n'
+            . 'Errors	239	Annotation has no Flags entry\n'
+            . 'Errors	239	Annotation not set to print\n'
+            . 'Summary	Corrections	0\n'
+            . 'Summary	Errors	653\n'
+            . 'Summary	Warnings	0\n'
+            . 'Summary	Infos	0\n'
+            . 'Finished	/tmp/pdf_upload/29c817fab1ae22089439c41b99932d02.pdf\n'	
+            . 'Duration	00:02	';
+        
+        $expected = 'Fix	PDFA	PDF/A entry missing\n'
+            . 'Errors	1	Syntax problem: Indirect object “endobj” keyword not preceded by an EOL marker\n'
+            . 'Errors	159	CMYK used but PDF/A OutputIntent not CMYK\n'
+            . 'Errors	239	Annotation has no Flags entry\n'
+            . 'Errors	239	Annotation not set to print\n'
+            . 'Summary	Corrections	0\n'
+            . 'Summary	Errors	653\n'
+            . 'Summary	Warnings	0\n'
+            . 'Summary	Infos	0\n';
+            
+        $filtered = $this->processor->filterReturnValue($returnValue);
+        $this->assertEquals($expected, $filtered);
+        
+    }
+    
+    /**
+     * Tests the return ok (no errors) function.
+     */
+    function testReturnOk() 
+    {
+        $returnValue = 'Progress	88	%\n'
+            . 'Progress	89	%\n'
+            . 'Summary	Corrections	0\n'
+            . 'Summary	Errors	653\n'
+            . 'Finished	/tmp/pdf_upload/29c817fab1ae22089439c41b99932d02.pdf\n'
+            . 'Duration	00:02	';
+        $ok = $this->processor->returnOk($returnValue);
+        $this->assertFalse($ok);
+        
+        $returnValue = 'Progress	88	%\n'
+            . 'Progress	89	%\n'
+            . 'Summary	Corrections	0\n'
+            . 'Summary	Errors	0\n'
+            . 'Finished	/tmp/pdf_upload/29c817fab1ae22089439c41b99932d02.pdf\n'
+            . 'Duration	00:02	';
+        $ok = $this->processor->returnOk($returnValue);
+        $this->assertTrue($ok);
+            
     }
     
 }
