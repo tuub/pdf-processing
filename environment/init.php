@@ -6,7 +6,13 @@
 session_start();
 header('Content-Type: text/html; charset=utf-8');
 
-$messages = parse_ini_file("ini/messages.ini");
+$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+if ($lang == 'de') {
+    $messages = parse_ini_file("ini/messages_de.ini");
+} else {
+    $messages = parse_ini_file("ini/messages_en.ini");
+}
+
 $configs = parse_ini_file("ini/config.ini");
 $xmpConfigs = parse_ini_file("ini/xmp_fragments.ini");
 
