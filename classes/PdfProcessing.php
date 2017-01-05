@@ -23,7 +23,8 @@ class PdfProcessing
     /**
      * Renames a file for security reasons.
      *
-     * @param string $filename            
+     * @param string $filename
+     * @return string
      */
     public function renameFile ($filename, $fileExt)
     {
@@ -35,8 +36,7 @@ class PdfProcessing
      * session.
      *
      * @param File $file
-     * @param string $targetDir
-     * @param string $newFileName
+     * @param string $saveFileName
      * @return boolean
      */
     public function saveFile ($file, $saveFileName)
@@ -256,16 +256,6 @@ class PdfProcessing
         readfile($path);
     }
     
-    /**
-     * Deletes the uploaded and processed files and clears the session.
-     */
-    public function clearSession() 
-    {
-        unlink($_SESSION['uploadFile']);
-        unlink($_SESSION['processedFile']);
-        unlink($_SESSION['xmpFile']);
-        session_unset();
-    }
 
     /**
      * Filters a string line by line.

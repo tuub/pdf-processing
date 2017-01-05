@@ -22,7 +22,7 @@
     // Check that the uploaded file exists
     if (!empty($_SESSION['uploadFile']) && !file_exists($_SESSION['uploadFile'])) {
         $errorMessage = $messages['fileNotFound'];
-        session_unset();
+        $login->clearSession();
     }
     
     // If a process button was pushed, perform processing 
@@ -41,22 +41,14 @@
         $args = $processor->createPdfaArgs( 
             $_POST['pdfa_convlevel'], $_POST['pdfa_mode']);
         
-//     } elseif (!empty($_POST['profile_process'])) {
-//         $processor->createAndSaveProcessedFileName('.pdf');
-//         $args = $processor->createPdfProfileArgs($_POST['pdf_profile']);
-    
-//     } elseif (!empty($_POST['free_process'])) {
-//         $processor->createAndSaveProcessedFileName('.pdf');
-//         $args = $processor->createPdfFreeArgs($_POST['pdf_args']);
-        
-    } 
+    }
     if (!empty($args)) {
         $processingReturnValue = $processor->executePdfProcessing($args);
         $processingReturnValue = $processor->filterReturnValue($processingReturnValue);
     }
       
     if (!empty($_POST['delete_file'])) {
-        $processor->clearSession();
+        $login->clearSession();
         $infoMessage = $messages['fileDeletedMessage'];
     }
 
