@@ -134,7 +134,7 @@ class PdfProcessing
      * @param string[] $metadataArray - additional metadata
      * @return string - the arguments
      */
-    public function createPdfaArgs($level, $mode) 
+    public function createPdfaArgs($level, $mode, $lang)
     {
         $metadata = '';
         if (!empty($_SESSION['xmpFile'])) {

@@ -39,7 +39,7 @@
             }
         }
         $args = $processor->createPdfaArgs( 
-            $_POST['pdfa_convlevel'], $_POST['pdfa_mode']);
+            $_POST['pdfa_convlevel'], $_POST['pdfa_mode'], $lang);
         
     }
     if (!empty($args)) {

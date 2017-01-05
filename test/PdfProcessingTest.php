@@ -83,7 +83,7 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $_SESSION['uploadFile'] = '/path/to/myFile.pdf';
         $_SESSION['processedFile'] = '/path/to/myFile_processed.pdf';
         $retval = $this->processor->createPdfaArgs('2a',
-            '--forceconversion_reconvert');
+            '--forceconversion_reconvert', 'de');
     
         $this->assertEquals('--forceconversion_reconvert '
             . $this->processor->configs['pdfLevelArg'] . '2a '
