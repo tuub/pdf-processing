@@ -16,7 +16,7 @@ class Login {
         $account = "";
         $password = "";
 
-        if ( isset($_POST['login']) && !$_SESSION['login'] ) {
+        if ( isset($_POST['login']) && ( empty($_SESSION['login']) || !$_SESSION['login'] )) {
             if ( isset($_POST['account'] )) {
                 $account = $_POST['account'];
             }
@@ -103,9 +103,15 @@ class Login {
      */
     public function clearSession()
     {
-        unlink($_SESSION['uploadFile']);
-        unlink($_SESSION['processedFile']);
-        unlink($_SESSION['xmpFile']);
+        if (!empty($_SESSION['uploadFile'])) {
+            unlink($_SESSION['uploadFile']);
+        }
+        if (!empty($_SESSION['processedFile'])) {
+            unlink($_SESSION['processedFile']);
+        }
+        if (!empty($_SESSION['xmpFile'])) {
+            unlink($_SESSION['xmpFile']);
+        }
         unset($_SESSION['uploadFile']);
         unset($_SESSION['processedFile']);
         unset($_SESSION['xmpFile']);
