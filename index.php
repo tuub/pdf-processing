@@ -9,7 +9,7 @@
 
     //Authentification
     $login->authMe();
-    if ($_POST['login'] && !$_SESSION['login']) {
+    if (isset($_POST['login']) && (empty($_SESSION['login']) || !$_SESSION['login'])) {
         $errorMessage = $messages['loginFail'];
     }
 
