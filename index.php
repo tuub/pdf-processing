@@ -9,6 +9,9 @@
 
     //Authentification
     $login->authMe();
+    if ($_POST['login'] && !$_SESSION['login']) {
+        $errorMessage = $messages['loginFail'];
+    }
 
     // The handler manages the data fromn the http request
     include("environment/handler.php");
