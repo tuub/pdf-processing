@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This class contains all functions needed for th pdf processing interface.
+ * This class contains all functions needed for the pdf processing interface.
  * On construction it loads the configurations from the config.ini file.
  */
 class PdfProcessing
@@ -13,11 +13,17 @@ class PdfProcessing
     var $configs = NULL;
 
     /**
+     * The array with messages.
+     */
+    var $messages = NULL;
+
+    /**
      * Contructor loading the configuration.
      */
-    function __construct ($configs)
+    function __construct ($configs, $messages)
     {
         $this->configs = $configs;
+        $this->messages = $messages;
     }
 
     /**
@@ -48,7 +54,7 @@ class PdfProcessing
         $targetFile = $this->configs['uploadPath'] . $saveFileName;
         
         if (file_exists($targetFile)) {
-            $errorMessage = $messages['fileAlreadyExists'];
+            $errorMessage = $this->messages['fileAlreadyExists'];
             
         } elseif (move_uploaded_file($file['tmp_name'], $targetFile)) {
             $_SESSION['uploadFile'] = $targetFile;
@@ -88,7 +94,7 @@ class PdfProcessing
         if (file_put_contents($xmpPath, $content)) {
             $_SESSION['xmpFile'] = $xmpPath; 
         } else {
-            $errorMessage = $messages['xmpFileNotSaved'];
+            $errorMessage = $this->messages['xmpFileNotSaved'];
             error_log("The .xmp file could not be saved!");
         }
         
@@ -158,7 +164,7 @@ class PdfProcessing
      * @param string $level - the compliancy level
      * @return string - the arguments
      */
-    public function createPdfaValidateArgs($level)
+    public function createPdfaValidateArgs($level, $lang)
     {
         $args = ' --analyze '
         . $this->configs['pdfLevelArg'] . $level . ' '
@@ -175,7 +181,7 @@ class PdfProcessing
      * @param string $profile - the profile file name
      * @return string - the arguments
      */
-    public function createPdfProfileArgs($profile)
+    public function createPdfProfileArgs($profile, $lang)
     {
         $args = $this->configs['pdfProfileArg'] . ' ' 
             . $this->configs['pdfProfilesPath'] . escapeshellarg($profile) . ' '
@@ -192,7 +198,7 @@ class PdfProcessing
      * @param string $args - the free args
      * @return string - the arguments
      */
-    public function createPdfFreeArgs($freeArgs)
+    public function createPdfFreeArgs($freeArgs, $lang)
     {
         $args = escapeshellcmd($freeArgs) . ' ' . $this->configs['pdfOutputArg'] 
             . $_SESSION['processedFile'] . ' ' . $this->configs['pdfOverwriteArg'] . ' ' 

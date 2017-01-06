@@ -22,7 +22,7 @@ if (!$configs) {
 
 // Class initialization
 include_once("classes/PdfProcessing.php");
-$processor = new PdfProcessing($configs);
+$processor = new PdfProcessing($configs, $messages);
 
 include_once("classes/XmpCreator.php");
 $xmpCreator = new XmpCreator($xmpConfigs);

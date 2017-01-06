@@ -27,7 +27,7 @@
     
     // If a process button was pushed, perform processing 
     if (!empty($_POST['pdfa_validate'])) {
-        $args = $processor->createPdfaValidateArgs($_POST['pdfa_level']);
+        $args = $processor->createPdfaValidateArgs($_POST['pdfa_level'], $lang);
 
     } elseif (!empty($_POST['pdfa_convert'])) {
         $processor->createAndSaveProcessedFileName('.pdf');

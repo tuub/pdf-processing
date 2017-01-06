@@ -18,7 +18,10 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
      * Instantiates the class to be tested.
      */
     function __construct() {
-        $this->processor = new PdfProcessing(parse_ini_file("ini/config.ini"));
+        $this->processor = new PdfProcessing(
+            parse_ini_file("ini/config.ini"),
+            parse_ini_file("ini/messages_de.ini")
+        );
     }
     
     /**
@@ -64,7 +67,7 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
     function testCreatePdfaValidateArgs() 
     {
         $_SESSION['uploadFile'] = '/path/to/myFile.pdf';
-        $retval = $this->processor->createPdfaValidateArgs('2a');
+        $retval = $this->processor->createPdfaValidateArgs('2a', 'de');
         
         $this->assertEquals(' --analyze ' 
             . $this->processor->configs['pdfLevelArg'] . '2a ' 
@@ -106,7 +109,7 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $_SESSION['processedFile'] = '/path/to/myFile_processed.pdf';
         $profileFile = 'A file name with spaces.kfpx';
         
-        $retval = $this->processor->createPdfProfileArgs($profileFile, '.pdf');
+        $retval = $this->processor->createPdfProfileArgs($profileFile, '.pdf', 'de');
     
         $this->assertEquals($this->processor->configs['pdfProfileArg'] . ' '
             . $this->processor->configs['pdfProfilesPath'] .escapeshellarg($profileFile) . ' '  
@@ -128,7 +131,7 @@ class PdfProcessingTest extends PHPUnit_Framework_TestCase
         $_SESSION['processedFile'] = 'foo.pdf';
         $_SESSION['uploadFile'] = 'bar.pdf';
         
-        $args = $this->processor->createPdfFreeArgs($freeArgs);
+        $args = $this->processor->createPdfFreeArgs($freeArgs, 'de');
         
         $this->assertEquals($freeArgs . ' ' . $this->processor->configs['pdfOutputArg'] 
             . 'foo.pdf ' . $this->processor->configs['pdfOverwriteArg'] . ' '  
