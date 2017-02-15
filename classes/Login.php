@@ -42,8 +42,8 @@ class Login {
      */
     private function isTubUser( $user, $password )
     {
-        $ldapserver = "ldap.tu-berlin.de";
-        $ldapconn = ldap_connect($ldapserver, 389);
+        $ldapserver = "ldaps://ldap.tu-berlin.de";
+        $ldapconn = ldap_connect($ldapserver);
 
         if (!$ldapconn) {
             $this->logMg("Could not connect to LDAP server: $ldapserver", 5);
