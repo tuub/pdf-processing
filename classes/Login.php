@@ -42,7 +42,7 @@ class Login {
      */
     private function isTubUser( $user, $password )
     {
-        $ldapserver = "ldaps://ldap.tu-berlin.de";
+        $ldapserver = "ldaps://ldap-slaves.tu-berlin.de";
         $ldapconn = ldap_connect($ldapserver);
 
         if (!$ldapconn) {
