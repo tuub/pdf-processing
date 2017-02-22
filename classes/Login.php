@@ -59,7 +59,9 @@ class Login {
             ldap_close($ldapconn);
             return false;
         }
+
         $this->logMg( "LDAP bind successful... - User found in TUB-LDAP ", 5);
+        ldap_close($ldapconn);
         return true;
     }
 
