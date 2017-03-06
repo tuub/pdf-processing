@@ -25,7 +25,6 @@ class Login {
             }
             if ( $this->isTubUser( $account, $password ) ) {
                 $_SESSION['login'] = true;
-                $this->logMg( "User $account ist authenticated", 5);
             }
             else {
                 $this->logMg( "no valid User: $account", 5);
