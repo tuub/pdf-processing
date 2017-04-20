@@ -5,6 +5,9 @@
 ?>
 <form method="post" action="index.php" enctype="multipart/form-data">
     <div class="container">
+        <p><?php echo($messages['loginMessage']) ?></p>
+    </div>
+    <div class="container">
     	<div class="row">
     		<div class="col-sm-6">
     			<p>	<?php echo($messages['account']) ?> </p>

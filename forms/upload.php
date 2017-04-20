@@ -10,7 +10,9 @@
     			<p>	<?php echo($messages['selectFile']) ?> </p>
     		</div>
     		<div class="col-sm-4">
-        		<input type="file" name="fileToUpload" id="fileToUpload">
+                <label class="btn btn-default btn-file">
+                    Browse <input type="file" name="fileToUpload" id="fileToUpload" class="hidden">
+                </label>
         	</div>
         </div>
         <div class="row">
