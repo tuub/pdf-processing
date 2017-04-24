@@ -6,13 +6,11 @@
 <form method="post" action="index.php" enctype="multipart/form-data">
     <div class="container">
     	<div class="row">
-    		<div class="col-sm-4">
+    		<div class="col-sm-3">
     			<p>	<?php echo($messages['selectFile']) ?> </p>
     		</div>
     		<div class="col-sm-4">
-                <label class="btn btn-default btn-file">
-                    Browse <input type="file" name="fileToUpload" id="fileToUpload" class="hidden">
-                </label>
+                <input type="file" name="fileToUpload" id="fileToUpload">
         	</div>
         </div>
         <div class="row">
