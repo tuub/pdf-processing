@@ -23,6 +23,11 @@ It is for the time being implemented only for test purposes.
     ; http://php.net/post-max-size
     post_max_size = 120M
 ```
+* To enable the pdfaPilot to embed MS Fonts in the PDF document, MS TrueType Fonts need to be installed:
+```
+    sudo apt-get install ttf-mscorefonts-installer
+```
+
 ## Configuration
 
 The main configuration file is `ini/config.ini` containing among other things paths to where uploaded and processed files are saved.
