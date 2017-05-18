@@ -72,8 +72,12 @@ class PdfProcessing
      * @param string $fileExt - the file extension
      */
     public function createAndSaveProcessedFileName($fileExt) 
-    {        
-        $_SESSION['processedFile'] = $this->configs['processedPath'] 
+    {
+        if (!file_exists($this->configs['processedPath'])) {
+            mkdir($this->configs['processedPath']);
+        }
+
+        $_SESSION['processedFile'] = $this->configs['processedPath']
             . $this->addFileSuffix($_SESSION['uploadFile'], $fileExt, '_processed'); 
         
         $_SESSION['processedDisplayName'] = $this->addFileSuffix($_SESSION['originalFileName'], 
