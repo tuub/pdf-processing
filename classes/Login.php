@@ -9,6 +9,19 @@
 class Login {
 
     /**
+     * The array with configurations.
+     */
+    var $configs = NULL;
+
+    /**
+     * Contructor loading the configuration.
+     */
+    function __construct ($configs)
+    {
+        $this->configs = $configs;
+    }
+
+    /**
      * Checks if there is a valid account for the user login.
      */
     public function authMe()
@@ -27,7 +40,7 @@ class Login {
                 $_SESSION['login'] = true;
             }
             else {
-                $this->logMg( "no valid User: $account", 5);
+                $this->logMg( "no valid User: $account", 1);
             }
         }
     }
@@ -41,25 +54,24 @@ class Login {
      */
     private function isTubUser( $user, $password )
     {
-        $ldapserver = "ldaps://ldap-slaves.tu-berlin.de";
-        $ldapconn = ldap_connect($ldapserver);
+        $ldapconn = ldap_connect($this->configs['ldapserver']);
 
         if (!$ldapconn) {
-            $this->logMg("Could not connect to LDAP server: $ldapserver", 5);
+            $this->logMg("Could not connect to LDAP server: " . $this->configs['ldapserver'], 4);
             return false;
         }
-        $this->logMg( "LDAP conn successful...", 5);
+        $this->logMg( "LDAP conn successful...", 4);
 
         $ldapuser = "uid=" . $user . ',ou=user,dc=tu-berlin,dc=de';
 
         $ldapbind = ldap_bind($ldapconn, $ldapuser, $password);
         if (!$ldapbind) {
-            $this->logMg("User not found in TUB-LDAP : Error trying to bind: " . ldap_error($ldapconn), 5);
+            $this->logMg("User not found in TUB-LDAP : Error trying to bind: " . ldap_error($ldapconn), 4);
             ldap_close($ldapconn);
             return false;
         }
 
-        $this->logMg( "LDAP bind successful... - User found in TUB-LDAP ", 5);
+        $this->logMg( "LDAP bind successful... - User found in TUB-LDAP ", 4);
         ldap_close($ldapconn);
         return true;
     }
@@ -80,22 +92,26 @@ class Login {
 
     /**
      * Logging message.
+     * LogLevels:
+     * 0: kein Logging
+     * 1: error
+     * 2: warning
+     * 3: info
+     * 4: debug
      *
      * @param $mess
      * @param $level
      */
     private function logMg($mess, $level)
     {
-        $logfile = "/var/log/pdfapilot.log";
-        $loglevel = 1;
 
-        if ( $level < $loglevel ) {
+        if ( $level > $this->configs['loglevel'] ) {
             return;
         }
 
         $date = date('r');
-        $message=$date.": ". $_SERVER['SCRIPT_NAME']." - ".$mess."\n";
-        file_put_contents($logfile, $message, FILE_APPEND | LOCK_EX);
+        $message = $date . ": " . $_SERVER['SCRIPT_NAME'] . " - " . $mess . "\n";
+        file_put_contents($this->configs['logfile'], $message, FILE_APPEND | LOCK_EX);
         return;
     }
 

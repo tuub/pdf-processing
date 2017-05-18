@@ -28,4 +28,4 @@ include_once("classes/XmpCreator.php");
 $xmpCreator = new XmpCreator($xmpConfigs);
 
 include_once("classes/Login.php");
-$login = new Login();
+$login = new Login($configs);
