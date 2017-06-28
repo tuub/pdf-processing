@@ -21,7 +21,13 @@ function createSelectBox($id, $messageArray)
         } else {
             $text = $explodedVal[0];
         }
-        echo ('<option value="' . $value . '">' . $text . '</option>');
+
+        $selected = "";
+        if ($value == $_POST[$id]) {
+            $selected = " selected";
+        }
+
+        echo ('<option value="' . $value . '"' . $selected . '>' . $text . '</option>');
     }
     echo ('</select>');
 }

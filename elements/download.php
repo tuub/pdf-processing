@@ -4,7 +4,6 @@
  */
 ?>
 
-<div class="container top-buffer">
     <div class="row">
         <div class="col-sm-12">
         	<p><?php echo $messages['downloadLabel'] ?>
@@ -15,4 +14,3 @@
 			</p> 
     	</div>
     </div>
-</div> 

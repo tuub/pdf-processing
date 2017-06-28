@@ -4,7 +4,7 @@
  */
 ?>
 <div class="row top-buffer">
-	<div class="col-sm-6 text-info"><?php echo($messages['pdfaMetadataMessage']) ?></div>
+	<div class="col-sm-9 text-info"><?php echo($messages['pdfaMetadataMessage']) ?></div>
 </div>
 <?php foreach ($configs['metadataField'] as $field) { ?>    
     <div class="row top-buffer">

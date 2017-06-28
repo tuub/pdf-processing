@@ -15,7 +15,13 @@
           <?php echo($messages['okMessage']) ?>
         </a>
 
-<?php } else { ?>
+<?php
+        // If there is a processed file, offer it to download
+        if (!empty($_SESSION['processedFile']) && file_exists($_SESSION['processedFile'])) {
+            include("elements/download.php");
+        }
+
+    } else { ?>
 
         <a href="#" class="btn btn-danger btn-lg">
           <span class="glyphicon glyphicon-remove-sign"></span> 
@@ -25,7 +31,7 @@
 <?php } ?>
     	</div>
     </div>
-    
+
     <div class="row top-buffer">
         <div class="col-sm-12">
         	<p><?php echo($messages['returnValueMessage']) ?></p>

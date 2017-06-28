@@ -37,11 +37,6 @@
             include("elements/info.php");
         }
 
-        // If there is a processed file, offer it to download
-        if (!empty($_SESSION['processedFile']) && file_exists($_SESSION['processedFile'])) {
-            include("elements/download.php");
-        }
-
         include("forms/logout.php");
 
     }
