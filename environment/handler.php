@@ -21,8 +21,8 @@
     
     // Check that the uploaded file exists
     if (!empty($_SESSION['uploadFile']) && !file_exists($_SESSION['uploadFile'])) {
+        $sessionControl->clearSession();
         $errorMessage = $messages['fileNotFound'];
-        $login->clearSession();
     }
     
     // If a process button was pushed, perform processing 
@@ -48,7 +48,7 @@
     }
       
     if (!empty($_POST['delete_file'])) {
-        $login->clearSession();
+        $sessionControl->clearSession();
         $infoMessage = $messages['fileDeletedMessage'];
     }
 

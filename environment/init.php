@@ -27,5 +27,5 @@ $processor = new PdfProcessing($configs, $messages);
 include_once("classes/XmpCreator.php");
 $xmpCreator = new XmpCreator($xmpConfigs);
 
-include_once("classes/Login.php");
-$login = new Login($configs);
+include_once("classes/SessionControl.php");
+$sessionControl = new SessionControl();

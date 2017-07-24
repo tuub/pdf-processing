@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
+        <meta charset="utf-8">
         <title><?php echo($messages['htmlTitle'])?></title>
 		
+        <base href="<?php echo $configs['baseUrl'] ?>">
+
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         
@@ -23,6 +25,7 @@
 	<body>
 		<div class="page-header">
 
-			<h3><img src="/images/tu_logo_3.png" class="logo"/><?php echo($messages['headline'])?></h3>
+			<h3><img src="images/tu_logo_3.png" class="logo"/><?php echo($messages['headline'])?></h3>
+
 		</div>
         <div class="top-buffer">
