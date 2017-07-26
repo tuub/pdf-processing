@@ -24,8 +24,31 @@
     </head>
 	<body>
 		<div class="page-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3>
+                            <a href="https://www.tu-berlin.de/" target="_blank">
+                                <img src="images/tu_logo_3.png" class="logo"/>
+                            </a>
+                            <?php echo($messages['headline'])?>
+                        </h3>
+                    </div>
+                    <ul class="nav navbar-nav ">
 
-			<h3><img src="images/tu_logo_3.png" class="logo"/><?php echo($messages['headline'])?></h3>
+                        <?php foreach ($messages['navButton'] as $nav) {
+                            $navigator = explode(",", $nav);
+                        ?>
+                            <li class="text-center active">
+                                <a href="<?php echo $navigator[1] ?>">
+                                    <i class="glyphicon <?php echo $navigator[2] ?>" aria-hidden="true"></i>
+                                    <?php echo $navigator[0] ?>
+                                </a>
+                            </li>
+                        <?php } ?>
 
+                    </ul>
+                </div>
+            </div>
 		</div>
-        <div class="top-buffer">
+        <div class="top-buffer bottom-buffer">

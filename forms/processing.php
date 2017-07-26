@@ -6,7 +6,7 @@
 <form method="post" action="index.php">
 	<div class="container">
 		<div class="row">
-			<div class="col-sm-12">
+			<div class="col-sm-9">
 				<p><?php echo($messages['uploadedFile'] . ' <strong>' . $_SESSION['originalFileName'] . '</strong>')  ?></p>
 			</div>
 		</div>
@@ -53,6 +53,6 @@
 						value="<?php echo($messages['deleteButton'])?>">
 			</div>
 		</div>
-		
+
 	</div>
 </form>

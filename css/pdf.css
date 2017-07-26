@@ -1,7 +1,11 @@
 @CHARSET "UTF-8";
 
 .top-buffer { 
-	margin-top:20px; 
+	margin-top:20px;
+}
+
+.bottom-buffer {
+	margin-bottom:60px;
 }
 
 .page-header {
@@ -29,9 +33,23 @@
 	border-top: 1px solid #000;
 }
 
-.footer a, .footer a:visited {
+.footer a, .footer a:visited, .page-header a, .page-header a:visited {
 	color: #c50e1f;
 	text-decoration: none;
 	outline: 0;
 	line-height: inherit;
+}
+
+.page-header li {
+	width: 70px;
+	margin-top: 15px;
+}
+
+.h5, h5 {
+	font-size: 16px;
+}
+
+.helppage img {
+	max-width: 800px;
+	padding: 50px 0;
 }
