@@ -34,20 +34,38 @@
                             <?php echo($messages['headline'])?>
                         </h3>
                     </div>
-                    <ul class="nav navbar-nav ">
+                    <div class="col-sm-3">
+                        <ul class="nav navbar-nav ">
 
-                        <?php foreach ($messages['navButton'] as $nav) {
-                            $navigator = explode(",", $nav);
-                        ?>
+                            <?php foreach ($messages['navButton'] as $nav) {
+                                $navigator = explode(",", $nav);
+                            ?>
+                                <li class="text-center active">
+                                    <a href="<?php echo $navigator[1] ?>">
+                                        <i class="glyphicon <?php echo $navigator[2] ?>" aria-hidden="true"></i>
+                                        <?php echo $navigator[0] ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+
+                            <?php $uri_parts = explode('?', $_SERVER['REQUEST_URI'], 2); ?>
                             <li class="text-center active">
-                                <a href="<?php echo $navigator[1] ?>">
-                                    <i class="glyphicon <?php echo $navigator[2] ?>" aria-hidden="true"></i>
-                                    <?php echo $navigator[0] ?>
-                                </a>
                             </li>
-                        <?php } ?>
-
-                    </ul>
+                        </ul>
+                    </div>
+                    <div class="col-sm-1 lang-selector">
+                        <a href="<?php echo $uri_parts[0] ?>?lang=en">
+                            <?php if ($lang != 'de') echo '<strong>' ?>
+                            En
+                            <?php if ($lang != 'de') echo '</strong>' ?>
+                        </a>
+                        <span> | </span>
+                        <a href="<?php echo $uri_parts[0] ?>?lang=de">
+                            <?php if ($lang == 'de') echo '<strong>' ?>
+                            De
+                            <?php if ($lang == 'de') echo '</strong>' ?>
+                        </a>
+                    </div>
                 </div>
             </div>
 		</div>

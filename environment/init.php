@@ -6,7 +6,15 @@
 session_start();
 header('Content-Type: text/html; charset=utf-8');
 
-$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+if (isset($_GET['lang'])) {
+    $lang = $_GET['lang'];
+    $_SESSION['lang'] = $lang;
+} else if (isset($_SESSION['lang'])){
+    $lang = $_SESSION['lang'];
+} else {
+    $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+}
+
 if ($lang == 'de') {
     $messages = parse_ini_file("ini/messages_de.ini");
 } else {
