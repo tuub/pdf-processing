@@ -1,8 +1,11 @@
-# PDF-Processing
-PDF-Processing is a web interface for the callas pdfaPilot CLI. 
-It is for the time being implemented only for test purposes.
+## PDF-Processing
+PDF-Processing is a web interface for the callas pdfaPilot CLI. It allows a logged in user to upload a PDF file, perform validation and conversion of and to PDF/A and to download a converted file. 
 
-## Prerequisits
+The current version presupposes a shibboleth login configuration in the Apache server.
+
+For a version supporting LDAP see the tag 1.0_ldap.
+
+### Prerequisits
 
 * PHP 7
 * Apache 2
@@ -28,6 +31,9 @@ It is for the time being implemented only for test purposes.
     sudo apt-get install ttf-mscorefonts-installer
 ```
 
-## Configuration
+### Configuration
 
 The main configuration file is `ini/config.ini` containing among other things paths to where uploaded and processed files are saved.
+
+All messages (including the help page) are stored in english and german in `ini/messages_<lang>.ini`
+
