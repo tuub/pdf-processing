@@ -3,7 +3,7 @@ PDF-Processing is a web interface for the callas pdfaPilot CLI. It allows a logg
 
 The current version presupposes a shibboleth login configuration in the Apache server.
 
-For a version supporting LDAP see the tag 1.0_ldap.
+For a version supporting LDAP see the tag 1.0_ldap. That version however has no help page and no language selector. To get those features using LDAP, you have to do some handiwork.
 
 ### Prerequisits
 
@@ -16,7 +16,7 @@ For a version supporting LDAP see the tag 1.0_ldap.
 ```
     ; Maximum allowed size for uploaded files.
     ; http://php.net/upload-max-filesize
-    upload_max_filesize = 100M
+    upload_max_filesize = 250M
     ; Maximum number of files that can be uploaded via a single request
     max_file_uploads = 1
 	[...]
