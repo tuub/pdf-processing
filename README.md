@@ -1,5 +1,7 @@
 ## PDF-Processing
-PDF-Processing is a web interface for the callas pdfaPilot CLI. It allows a logged in user to upload a PDF file, perform validation and conversion of and to PDF/A and to download a converted file. 
+PDF-Processing is a web interface for the callas pdfaPilot CLI. It allows a logged in user to upload a PDF file, perform validation of and conversion to PDF/A and to download a converted file. 
+
+The software is posted here as it is installed at the Technical University of Berlin. If you wish to use it, you will probably want to adapt images, links and some texts to your needs. All links and texts are found in `ini/messages_<lang>.ini`. Colors can be adjusted in `css/pdf.css`.  
 
 The current version presupposes a shibboleth login configuration in the Apache server.
 
@@ -16,7 +18,7 @@ For a version supporting LDAP see the tag 1.0_ldap. That version however has no 
 ```
     ; Maximum allowed size for uploaded files.
     ; http://php.net/upload-max-filesize
-    upload_max_filesize = 250M
+    upload_max_filesize = 120M
     ; Maximum number of files that can be uploaded via a single request
     max_file_uploads = 1
 	[...]
@@ -24,11 +26,16 @@ For a version supporting LDAP see the tag 1.0_ldap. That version however has no 
     ; Its value may be 0 to disable the limit. It is ignored if POST data reading
     ; is disabled through enable_post_data_reading.
     ; http://php.net/post-max-size
-    post_max_size = 120M
+    post_max_size = 121M
 ```
-* To enable the pdfaPilot to embed MS Fonts in the PDF document, MS TrueType Fonts need to be installed:
+* If you use a linux server, you need to install MS TrueType Fonts to enable the pdfaPilot to embed MS Fonts in the PDF document:
 ```
     sudo apt-get install ttf-mscorefonts-installer
+```
+
+* You may also want a cronjob deleting older uploaded and converted files, something linke this:
+```
+30 23 * * * www-data find /usr/local/pdfa_conversion/* -mtime +1 -exec rm {} \; >/dev/null 2>&1
 ```
 
 ### Configuration
