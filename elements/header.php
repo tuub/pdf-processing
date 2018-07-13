@@ -39,8 +39,8 @@
                 <div class="row">
                     <div class="col-sm-8">
                         <h3>
-                            <a href="https://www.tu-berlin.de/" target="_blank">
-                                <img src="images/tu_logo_3.png" class="logo"/>
+                            <a href="<?php echo($messages['logo_link'])?>" target="_blank">
+                                <img src="<?php echo($messages['logo_image'])?>" class="logo"/>
                             </a>
                             <?php echo($messages['headline'])?>
                         </h3>
